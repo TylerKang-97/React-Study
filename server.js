@@ -23,7 +23,7 @@ const connection = mysql.createConnection({
 connection.connect();
 
 const multer = require('multer');
-const upload = multer({dest: './upload'})
+const upload = multer({dest: './upload'});
 
 app.get('/api/customers', (req, res) => {
     connection.query(
