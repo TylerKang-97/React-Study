@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Customer from './components/Customer';
 import './App.css';
+import CustomerAdd from './components/CustomerAdd';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
@@ -30,20 +31,29 @@ class App extends Component {
   props: 변경될 수 없는 data
   state: component내에서 변경될 수 있는 변수를 처리할때
   */
-  state = {
-    customers: "",
-    completed: 0
+  constructor(props) {
+    super(props);
+    this.state = {
+      customers: '',
+      completed: 0
+    }
+  }
+
+  stateRefresh = () => {
+    this.setState({
+      customers: '',
+      completed: 0
+    });
+    this.callApi()
+    .then(res => this.setState({customers: res}))
+    .catch(err => console.log(err));
   }
 
   componentDidMount() {
     this.timer = setInterval(this.progress, 20);
     this.callApi()
-      .then(res =>{console.log(res);
-         this.setState({customers: res});
-      
-    })
-      .catch(err => console.log(err));
-    
+    .then(res => this.setState({customers: res}))
+    .catch(err => console.log(err));
   }
   // server에 있는 api호출
   callApi = async () => {
@@ -61,7 +71,8 @@ class App extends Component {
     const { classes } = this.props;
 
     return (
-     <Paper className={classes.root}>
+     <div>
+       <Paper className={classes.root}>
        <Table className={classes.table}>
          <TableHead>
            <TableRow>
@@ -95,8 +106,9 @@ class App extends Component {
          </TableRow>}
          </TableBody>
        </Table>
-       
      </Paper>
+     <CustomerAdd stateRefresh={this.stateRefresh}/>
+     </div>
     );
   }
   }
